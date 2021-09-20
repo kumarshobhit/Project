@@ -3,7 +3,7 @@ const puppeteer = require('puppeteer') ;
 const fs=require("fs") ;
 let path=require('path') ;
 let price= -1;
-const product='apple iphone 13'
+// const product='apple iphone 13'
 let url="" ;
 const emailpassObj = require("./secrets");
 const nodemailer = require('nodemailer');
@@ -11,7 +11,7 @@ const CronJob = require('cron').CronJob;
 let page;
 
 let input = process.argv.slice(2);
-console.log(input) ;
+const product=input ;
 
 
 async function fn() {

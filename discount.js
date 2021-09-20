@@ -1,14 +1,17 @@
+#!/usr/bin/env node
 const puppeteer = require('puppeteer') ;
 const fs=require("fs") ;
 let path=require('path') ;
 let price= -1;
 const product='apple iphone 13'
-// const url='https://www.amazon.in/Apple-iPhone-13-Mini-256GB/dp/B09G99CW2C/' ;
 let url="" ;
 const emailpassObj = require("./secrets");
 const nodemailer = require('nodemailer');
 const CronJob = require('cron').CronJob;
 let page;
+
+let input = process.argv.slice(2);
+console.log(input) ;
 
 
 async function fn() {

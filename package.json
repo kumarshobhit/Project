@@ -4,9 +4,6 @@
     "nodemailer": "^6.6.3",
     "puppeteer": "^10.2.0"
   },
-  "bin": {
-    "discount": "./discount.js"
-  },
   "name": "Project",
   "version": "1.0.0",
   "main": "index.js",
@@ -25,5 +22,8 @@
     "url": "https://github.com/kumarshobhit/Project/issues"
   },
   "homepage": "https://github.com/kumarshobhit/Project#readme",
-  "description": ""
+  "description": "",
+  "bin": {
+    "peppy": "discount.js"
+  }
 }

@@ -1,7 +1,10 @@
 const puppeteer = require('puppeteer') ;
 const fs=require("fs") ;
-const path=require('path') ;
-const url='https://www.amazon.in/Apple-iPhone-13-Mini-256GB/dp/B09G99CW2C/' ;
+let path=require('path') ;
+let price= -1;
+const product='apple iphone 13'
+// const url='https://www.amazon.in/Apple-iPhone-13-Mini-256GB/dp/B09G99CW2C/' ;
+let url="" ;
 const emailpassObj = require("./secrets");
 const nodemailer = require('nodemailer');
 const CronJob = require('cron').CronJob;
@@ -15,6 +18,14 @@ async function fn() {
         args:['--start-maximized'],
     }) ;
     page=await browser.newPage() ;
+    // get the link of the product from amazon.in
+    await page.goto('https://www.amazon.in/');
+    await page.type('input[aria-label="Search"]',product,{delay:50});
+    await waitAndClick('#nav-search-submit-button',page) ;
+    await page.waitFor(3000);
+    let list = await page.$$(".a-link-normal.a-text-normal");
+    let element=list[0] ;
+    url = await page. evaluate(el => el.href, element)
     await page.goto(url);
 }
     
@@ -33,7 +44,8 @@ async function checkPrice(page) {
     let element= await page. waitForSelector('#priceblock_ourprice'); 
     let dollarPrice = await page. evaluate(el => el.textContent, element) ;
     let currentPrice = Number(dollarPrice.replace(/[^0-9.-]+/g,""));
-    if (currentPrice <= 80000) {
+    if(price == -1 ) price=currentPrice ;
+    if (currentPrice <= price) {
             console.log("BUY!!!! " + currentPrice);
             sendNotification(currentPrice);
     }
@@ -64,3 +76,19 @@ async function sendNotification(price) {
   
     console.log("Message sent: %s", info.messageId);
   }
+
+
+  function waitAndClick(selector,cpage) {
+        return new Promise(function (resolve, reject) {
+        let waitPromise=cpage.waitForSelector(selector,{visible:true});
+        waitPromise.then(function(){
+        let clickPromise=page.click(selector,{delay:100});
+        return clickPromise;
+    }).then(function () {
+        resolve() ;
+    }).catch(function(err){
+        reject(err);
+    })
+        })
+    }
+       
